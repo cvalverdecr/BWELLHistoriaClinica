@@ -418,41 +418,111 @@
           display: block !important;
         }
         .sheet-title {
-          margin-bottom: 10px;
+          display: grid;
+          grid-template-columns: minmax(0, 1.8fr) minmax(220px, 0.9fr);
+          gap: 10px 14px;
+          align-items: end;
+          margin-bottom: 8px;
           padding: 0 0 8px;
           border-bottom: 2px solid #2458a6;
+          position: relative;
+        }
+        .sheet-title::before {
+          content: "INFORME MEDICO";
+          position: absolute;
+          top: -2px;
+          right: 0;
+          padding: 3px 8px;
+          border-radius: 999px;
+          background: #143d73 !important;
+          color: #fff !important;
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
         }
         .sheet-title h2 {
           color: #143d73;
-          font-size: 18px;
-          margin-bottom: 3px;
+          font-size: 17px;
+          margin: 0 0 2px;
+          max-width: 90%;
         }
         .sheet-title p {
           color: #465569;
-          font-size: 11px;
+          font-size: 10px;
+          margin: 0;
         }
         .required-summary {
+          align-self: start;
           gap: 8px;
-          margin-top: 10px;
+          margin: 0;
         }
         .required-summary-item {
           background: #eef4ff !important;
           border: 1px solid #bfd0ea;
-          padding: 8px 10px;
+          padding: 7px 9px;
         }
         .required-summary-item strong {
           font-size: 10px;
         }
         .required-summary-item span {
-          font-size: 15px;
+          font-size: 14px;
           color: #143d73;
+        }
+        .sections {
+          margin-top: 4px;
         }
         .section {
           break-inside: avoid;
+          page-break-inside: avoid;
           margin: 8px 0;
           border: 1px solid #cfd8e6;
           border-radius: 10px;
           background: #fff;
+        }
+        .section:first-child {
+          break-inside: auto;
+          page-break-inside: auto;
+          margin-top: 4px;
+        }
+        .intake-section {
+          border-color: #bfcfe4;
+          background: linear-gradient(180deg, #fbfdff 0%, #f6f9fd 100%) !important;
+        }
+        .intake-section .grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 8px;
+        }
+        .intake-section .field {
+          min-height: 50px;
+          background: #ffffff !important;
+        }
+        .intake-section .field.half,
+        .intake-section .field.third,
+        .intake-section .field.small {
+          grid-column: span 1;
+        }
+        .intake-section .field.wide {
+          grid-column: 1 / -1;
+        }
+        .intake-section .field:nth-child(1),
+        .intake-section .field:nth-child(2),
+        .intake-section .field:nth-child(3),
+        .intake-section .field:nth-child(4) {
+          grid-column: span 1;
+        }
+        .intake-section .field:nth-child(5) {
+          grid-column: 1 / span 2;
+          min-height: 58px;
+        }
+        .intake-section .field:nth-child(6),
+        .intake-section .field:nth-child(7),
+        .intake-section .field:nth-child(8),
+        .intake-section .field:nth-child(9) {
+          grid-column: span 1;
+        }
+        .intake-section .field:nth-child(10),
+        .intake-section .field:nth-child(11) {
+          grid-column: span 2;
         }
         .section h3 {
           background: #eaf2ff !important;
@@ -465,16 +535,49 @@
           padding: 10px;
         }
         .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 8px 10px;
         }
         .field {
+          grid-column: span 1;
           gap: 3px;
+          padding: 6px 8px;
+          border: 1px solid #e1e8f2;
+          border-radius: 8px;
+          background: #fcfdff !important;
+          min-height: 54px;
+        }
+        .field.half {
+          grid-column: span 1;
+        }
+        .field.third {
+          grid-column: span 1;
+        }
+        .field.small {
+          grid-column: span 1;
+        }
+        .field.wide {
+          grid-column: 1 / -1;
         }
         label,
         .label {
           font-size: 10px;
           font-weight: 700;
           color: #314255;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+        }
+        .field .label {
+          margin-bottom: 2px;
+        }
+        .intake-section .field:nth-child(5) label,
+        .intake-section .field:nth-child(5) .label {
+          font-size: 11px;
+        }
+        .intake-section .field:nth-child(5) input,
+        .intake-section .field:nth-child(5) select {
+          font-size: 13px;
+          font-weight: 700;
         }
         .result {
           break-inside: avoid;
@@ -502,15 +605,19 @@
         input,
         textarea,
         select {
-          border: 1px solid #c9d3e0;
-          border-radius: 7px;
-          padding: 6px 8px;
-          background: #fcfdff !important;
+          border: 0;
+          border-bottom: 1px solid #c9d3e0;
+          border-radius: 0;
+          padding: 2px 0 4px;
+          background: transparent !important;
           min-height: 0;
           box-shadow: none;
+          font-size: 11px;
+          font-weight: 600;
+          color: #13263d;
         }
         textarea {
-          min-height: 48px;
+          min-height: 38px;
         }
         .option {
           border: 1px solid #dde6f0;
@@ -522,11 +629,24 @@
           grid-template-columns: 1fr 1fr;
           gap: 6px 8px;
         }
+        .option span {
+          font-size: 10px;
+          line-height: 1.25;
+        }
+        .inline-options {
+          gap: 6px;
+        }
+        .inline-options .option {
+          min-width: 0;
+        }
         .consent {
           display: none;
         }
         .payload {
           display: none;
+        }
+        .guide-grid {
+          grid-template-columns: 1fr 1fr;
         }
       }
     </style>
@@ -1416,7 +1536,8 @@
         renderGuide();
       }
       function renderSection(formId, s) {
-        return `<div class="section"><h3>${esc(s.title)}</h3><div class="body">${s.note ? `<div class="rule-note">${esc(s.note)}</div>` : ""}<div class="grid">${s.items.map((i) => renderItem(formId, i)).join("")}</div></div></div>`;
+        const isGeneralSection = s.title === "Datos generales";
+        return `<div class="section${isGeneralSection ? " intake-section" : ""}"><h3>${esc(s.title)}</h3><div class="body">${s.note ? `<div class="rule-note">${esc(s.note)}</div>` : ""}<div class="grid">${s.items.map((i) => renderItem(formId, i)).join("")}</div></div></div>`;
       }
       function renderItem(formId, i) {
         if (i.kind === "field")
