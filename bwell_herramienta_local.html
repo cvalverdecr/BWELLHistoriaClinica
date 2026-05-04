@@ -17,7 +17,7 @@
         --line: #dbe3ef;
         --accent: #2458a6;
         --accent-2: #eef4ff;
-        --warn: #fff7db;
+        --warn: #ff9933;
         --danger: #fff0f0;
         --ok: #eefaf0;
         --radius: 16px;
@@ -304,7 +304,7 @@
       }
       .result.warn {
         background: var(--warn);
-        border-color: #f1df99;
+        border-color: #e57a00;
       }
       .result.danger {
         background: var(--danger);
@@ -591,8 +591,8 @@
           border-color: #b7dfc0;
         }
         .result.warn {
-          background: #fff7db !important;
-          border-color: #ead28a;
+          background: #ff9933 !important;
+          border-color: #e57a00;
         }
         .result.danger {
           background: #fff0f0 !important;
@@ -907,7 +907,27 @@
             );
             const candidate =
               diag.length > 0 || cardio.length > 0 || endoTrigger || medTrigger;
-            const labels = labelList("cardio", "diagnosticos", diag);
+            const labels = [
+              ...labelList("cardio", "diagnosticos", diag),
+              ...labelList(
+                "cardio",
+                "cardiovasculares",
+                cardio.filter((x) =>
+                  [
+                    "cardiopatia",
+                    "insuficiencia",
+                    "ecv",
+                    "infarto",
+                    "arritmias",
+                  ].includes(x),
+                ),
+              ),
+              ...labelList(
+                "cardio",
+                "endocrino",
+                endo.filter((x) => ["higadoGraso", "gota"].includes(x)),
+              ),
+            ].filter((label, index, arr) => arr.indexOf(label) === index);
             return {
               resultCode: candidate ? "C" : "N",
               resultText: candidate ? "Candidato BWell" : "No aplica BWell",
@@ -1530,7 +1550,7 @@
           p.className = "pane" + (idx === 0 ? " active" : "");
           p.id = "pane-" + id;
           p.dataset.form = id;
-          p.innerHTML = `<div class="sheet-title"><h2>${esc(form.title)}</h2><p>${esc(form.subtitle)}</p><div id="${id}__requiredSummary" class="required-summary"><div class="required-summary-item"><strong>Póliza</strong><span id="${id}__summary_poliza"></span></div><div class="required-summary-item"><strong>Certificados</strong><span id="${id}__summary_certificados"></span></div></div></div><div class="consent no-print"><input id="${id}__consent" type="checkbox"><label for="${id}__consent">Confirmo que el uso de esta herramienta cuenta con la base legal/consentimiento aplicable y que el PDF o archivo generado será custodiado conforme a las políticas internas.</label></div><div class="sections">${form.sections.map((s) => renderSection(id, s)).join("")}</div><div id="${id}__result" class="result"><h3>Resultado</h3><p>Presione <strong>Calcular resultado</strong> para aplicar las reglas locales.</p></div><div class="toolbar no-print"><button class="action" type="button" onclick="calculate('${id}')">Calcular resultado</button><button class="action" type="button" onclick="printPdf('${id}')">Crear PDF / imprimir</button><button class="action secondary" type="button" onclick="generateCsv('${id}')">Generar CSV</button><button class="action secondary" type="button" onclick="copyPayload('${id}')">Copiar payload mínimo</button><button class="action secondary" type="button" onclick="downloadPayload('${id}')">Descargar payload mínimo</button><button class="action danger" type="button" onclick="clearForm('${id}')">Limpiar campos</button><span class="status" id="${id}__status">Procesamiento local, sin transmisión.</span></div>`;
+        p.innerHTML = `<div class="sheet-title"><h2>${esc(form.title)}</h2><p>${esc(form.subtitle)}</p><div id="${id}__requiredSummary" class="required-summary"><div class="required-summary-item"><strong>Póliza</strong><span id="${id}__summary_poliza"></span></div><div class="required-summary-item"><strong>Certificados</strong><span id="${id}__summary_certificados"></span></div></div></div><div class="consent no-print"><input id="${id}__consent" type="checkbox"><label for="${id}__consent">Confirmo que el uso de esta herramienta cuenta con la base legal/consentimiento aplicable y que el PDF o archivo generado será custodiado conforme a las políticas internas.</label></div><div class="sections">${form.sections.map((s) => renderSection(id, s)).join("")}</div><div id="${id}__result" class="result"><h3>Resultado</h3><p>Presione <strong>¿Es Candidato?</strong> para aplicar las reglas locales.</p></div><div class="toolbar no-print"><button class="action" type="button" onclick="calculate('${id}')">¿Es Candidato?</button><button class="action" type="button" onclick="printPdf('${id}')">Crear PDF / imprimir</button><button class="action secondary" type="button" onclick="generateCsv('${id}')">Generar CSV</button><button class="action secondary" type="button" onclick="copyPayload('${id}')">Copiar payload mínimo</button><button class="action secondary" type="button" onclick="downloadPayload('${id}')">Descargar payload mínimo</button><button class="action danger" type="button" onclick="clearForm('${id}')">Limpiar campos</button><span class="status" id="${id}__status">Procesamiento local, sin transmisión.</span></div>`;
           panes.appendChild(p);
         });
         renderGuide();
