@@ -324,6 +324,14 @@
         font-size: 12px;
         overflow: auto;
       }
+      .hidden-user {
+        display: none !important;
+      }
+      .payload.no-print,
+      .toolbar button[onclick^="copyPayload"],
+      .toolbar button[onclick^="downloadPayload"] {
+        display: none !important;
+      }
       .consent {
         display: flex;
         gap: 10px;
@@ -1664,6 +1672,51 @@
         poliza.textContent = data.poliza || "";
         certificados.textContent = data.certificados || "";
       }
+      function bindCardioDependencies() {
+        const antihipertensivos = document.querySelector(
+          '#pane-cardio input[data-group="medicamentos"][value="antihipertensivos"]',
+        );
+        const hipertension = document.querySelector(
+          '#pane-cardio input[data-group="diagnosticos"][value="hipertension"]',
+        );
+        const hipoglucemiantes = document.querySelector(
+          '#pane-cardio input[data-group="medicamentos"][value="hipoglucemiantes"]',
+        );
+        const dm1 = document.querySelector(
+          '#pane-cardio input[data-group="diagnosticos"][value="dm1"]',
+        );
+        const dm2 = document.querySelector(
+          '#pane-cardio input[data-group="diagnosticos"][value="dm2"]',
+        );
+        const resistenciaInsulina = document.querySelector(
+          '#pane-cardio input[data-group="diagnosticos"][value="resistenciaInsulina"]',
+        );
+        const hipolipemiantes = document.querySelector(
+          '#pane-cardio input[data-group="medicamentos"][value="hipolipemiantes"]',
+        );
+        const dislipidemia = document.querySelector(
+          '#pane-cardio input[data-group="diagnosticos"][value="dislipidemia"]',
+        );
+        if (antihipertensivos && hipertension) {
+          antihipertensivos.addEventListener("change", () => {
+            if (antihipertensivos.checked) hipertension.checked = true;
+          });
+        }
+        if (hipoglucemiantes && dm1 && dm2 && resistenciaInsulina) {
+          hipoglucemiantes.addEventListener("change", () => {
+            if (hipoglucemiantes.checked) {
+              dm1.checked = true;
+              dm2.checked = true;
+              resistenciaInsulina.checked = true;
+            }
+          });
+        }
+        if (hipolipemiantes && dislipidemia) {
+          hipolipemiantes.addEventListener("change", () => {
+            if (hipolipemiantes.checked) dislipidemia.checked = true;
+          });
+        }
+      }
       function flattenFormData(formId, data) {
         const flat = {};
         for (const section of FORMS[formId].sections) {
@@ -1849,11 +1902,12 @@
         updateRequiredSummary(formId, {});
         document.getElementById(`${formId}__result`).className = "result";
         document.getElementById(`${formId}__result`).innerHTML =
-          "<h3>Resultado</h3><p>Presione <strong>Calcular resultado</strong> para aplicar las reglas locales.</p>";
+          "<h3>Resultado</h3><p>Presione <strong>¿Es Candidato?</strong> para aplicar las reglas locales.</p>";
         document.getElementById(`${formId}__status`).textContent =
           "Campos limpiados.";
       }
       render();
+      bindCardioDependencies();
     </script>
   </body>
 </html>
