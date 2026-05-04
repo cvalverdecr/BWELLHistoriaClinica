@@ -218,6 +218,10 @@
         border-radius: 10px;
         background: #fbfcfe;
       }
+      .option.cardio-positive-active {
+        background: #ccff99;
+        border-color: #9ccc65;
+      }
       .option input {
         width: auto;
         margin-top: 3px;
@@ -632,6 +636,12 @@
           background: #fbfcff !important;
           border-radius: 8px;
           padding: 5px 6px;
+        }
+        .option.cardio-positive-active {
+          background: #ccff99 !important;
+          border-color: #9ccc65 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
         }
         .options {
           grid-template-columns: 1fr 1fr;
@@ -1673,6 +1683,31 @@
         certificados.textContent = data.certificados || "";
       }
       function bindCardioDependencies() {
+        const trackedSelectors = [
+          '#pane-cardio input[data-group="cardiovasculares"][value="cardiopatia"]',
+          '#pane-cardio input[data-group="cardiovasculares"][value="insuficiencia"]',
+          '#pane-cardio input[data-group="cardiovasculares"][value="ecv"]',
+          '#pane-cardio input[data-group="cardiovasculares"][value="infarto"]',
+          '#pane-cardio input[data-group="cardiovasculares"][value="arritmias"]',
+          '#pane-cardio input[data-group="endocrino"][value="higadoGraso"]',
+          '#pane-cardio input[data-group="endocrino"][value="gota"]',
+          '#pane-cardio input[data-group="diagnosticos"][value="hipertension"]',
+          '#pane-cardio input[data-group="diagnosticos"][value="dm2"]',
+          '#pane-cardio input[data-group="diagnosticos"][value="sindromeMetabolico"]',
+          '#pane-cardio input[data-group="diagnosticos"][value="dm1"]',
+          '#pane-cardio input[data-group="diagnosticos"][value="dislipidemia"]',
+          '#pane-cardio input[data-group="diagnosticos"][value="resistenciaInsulina"]',
+        ];
+        const trackedInputs = trackedSelectors
+          .map((selector) => document.querySelector(selector))
+          .filter(Boolean);
+        const refreshCardioHighlights = () => {
+          trackedInputs.forEach((input) => {
+            const option = input.closest(".option");
+            if (!option) return;
+            option.classList.toggle("cardio-positive-active", input.checked);
+          });
+        };
         const antihipertensivos = document.querySelector(
           '#pane-cardio input[data-group="medicamentos"][value="antihipertensivos"]',
         );
@@ -1700,6 +1735,7 @@
         if (antihipertensivos && hipertension) {
           antihipertensivos.addEventListener("change", () => {
             if (antihipertensivos.checked) hipertension.checked = true;
+            refreshCardioHighlights();
           });
         }
         if (hipoglucemiantes && dm1 && dm2 && resistenciaInsulina) {
@@ -1709,13 +1745,19 @@
               dm2.checked = true;
               resistenciaInsulina.checked = true;
             }
+            refreshCardioHighlights();
           });
         }
         if (hipolipemiantes && dislipidemia) {
           hipolipemiantes.addEventListener("change", () => {
             if (hipolipemiantes.checked) dislipidemia.checked = true;
+            refreshCardioHighlights();
           });
         }
+        trackedInputs.forEach((input) => {
+          input.addEventListener("change", refreshCardioHighlights);
+        });
+        refreshCardioHighlights();
       }
       function flattenFormData(formId, data) {
         const flat = {};
