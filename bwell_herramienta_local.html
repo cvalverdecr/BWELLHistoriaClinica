@@ -226,6 +226,10 @@
         background: #ccff99;
         border-color: #9ccc65;
       }
+      .option.articular-positive-active {
+        background: #ccff99;
+        border-color: #9ccc65;
+      }
       .option input {
         width: auto;
         margin-top: 3px;
@@ -648,6 +652,12 @@
           print-color-adjust: exact;
         }
         .option.gastro-positive-active {
+          background: #ccff99 !important;
+          border-color: #9ccc65 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        .option.articular-positive-active {
           background: #ccff99 !important;
           border-color: #9ccc65 !important;
           -webkit-print-color-adjust: exact;
@@ -1578,7 +1588,7 @@
           p.className = "pane" + (idx === 0 ? " active" : "");
           p.id = "pane-" + id;
           p.dataset.form = id;
-        p.innerHTML = `<div class="sheet-title"><h2>${esc(form.title)}</h2><p>${esc(form.subtitle)}</p><div id="${id}__requiredSummary" class="required-summary"><div class="required-summary-item"><strong>Póliza</strong><span id="${id}__summary_poliza"></span></div><div class="required-summary-item"><strong>Certificados</strong><span id="${id}__summary_certificados"></span></div></div></div><div class="consent no-print"><input id="${id}__consent" type="checkbox"><label for="${id}__consent">Confirmo que el uso de esta herramienta cuenta con la base legal/consentimiento aplicable y que el PDF o archivo generado será custodiado conforme a las políticas internas.</label></div><div class="sections">${form.sections.map((s) => renderSection(id, s)).join("")}</div><div id="${id}__result" class="result"><h3>Resultado</h3><p>Presione <strong>¿Es Candidato?</strong> para aplicar las reglas locales.</p></div><div class="toolbar no-print"><button class="action" type="button" onclick="calculate('${id}')">¿Es Candidato?</button><button class="action" type="button" onclick="printPdf('${id}')">Crear PDF / imprimir</button><button class="action secondary" type="button" onclick="generateCsv('${id}')">Generar CSV</button><button class="action secondary" type="button" onclick="copyPayload('${id}')">Copiar payload mínimo</button><button class="action secondary" type="button" onclick="downloadPayload('${id}')">Descargar payload mínimo</button><button class="action danger" type="button" onclick="clearForm('${id}')">Limpiar campos</button><span class="status" id="${id}__status">Procesamiento local, sin transmisión.</span></div>`;
+        p.innerHTML = `<div class="sheet-title"><h2>${esc(form.title)}</h2><p>${esc(form.subtitle)}</p><div id="${id}__requiredSummary" class="required-summary"><div class="required-summary-item"><strong>Póliza</strong><span id="${id}__summary_poliza"></span></div><div class="required-summary-item"><strong>Certificados</strong><span id="${id}__summary_certificados"></span></div></div></div><div class="consent no-print"><input id="${id}__consent" type="checkbox"><label for="${id}__consent">Confirmo que el uso de esta herramienta cuenta con la base legal/consentimiento aplicable y que el PDF o archivo generado será custodiado conforme a las políticas internas.</label></div><div class="sections">${form.sections.map((s) => renderSection(id, s)).join("")}</div><div id="${id}__result" class="result"><h3>Resultado</h3><p>Presione <strong>¿Es Candidato?</strong> para aplicar las reglas locales.</p></div><div class="toolbar no-print"><button class="action" type="button" onclick="calculate('${id}')">¿Es Candidato?</button><button class="action" type="button" onclick="printPdf('${id}')">Crear PDF / imprimir</button><button class="action secondary" type="button" onclick="generateCsv('${id}')">Generar CSV</button><button class="action secondary" type="button" onclick="copyPayload('${id}')">Copiar payload mínimo</button><button class="action secondary" type="button" onclick="downloadPayload('${id}')">Descargar payload mínimo</button><button class="action danger" type="button" onclick="clearForm('${id}')">Limpiar campos</button><span class="status" id="${id}__status">Creado por Dra. Melissa Chavarría - Procesamiento local, sin transmisión - Versión 1.0</span></div>`;
           panes.appendChild(p);
         });
         renderGuide();
@@ -1677,6 +1687,17 @@
             if (input) input.focus();
             return false;
           }
+        }
+        return true;
+      }
+      function validateFormSpecificRules(formId, data) {
+        if (formId === "articular" && !data.paquete) {
+          alert("Debe seleccionar una opción en Paquete BWell para continuar.");
+          const input = document.querySelector(
+            '#pane-articular input[data-field="paquete"]',
+          );
+          if (input) input.focus();
+          return false;
         }
         return true;
       }
@@ -1807,6 +1828,39 @@
         });
         refreshGastroHighlights();
       }
+      function bindArticularHighlights() {
+        const trackedSelectors = [
+          '#pane-articular input[data-group="diagnosticos"][value="lumbalgia"]',
+          '#pane-articular input[data-group="diagnosticos"][value="cervicalgia"]',
+          '#pane-articular input[data-group="diagnosticos"][value="dorsalgia"]',
+          '#pane-articular input[data-group="diagnosticos"][value="hernia"]',
+          '#pane-articular input[data-group="diagnosticos"][value="radiculopatia"]',
+          '#pane-articular input[data-group="diagnosticos"][value="artrosis"]',
+          '#pane-articular input[data-group="diagnosticos"][value="artritis"]',
+          '#pane-articular input[data-group="diagnosticos"][value="meniscal"]',
+          '#pane-articular input[data-group="diagnosticos"][value="tendinopatias"]',
+          '#pane-articular input[data-group="diagnosticos"][value="bursitis"]',
+          '#pane-articular input[data-group="diagnosticos"][value="miofascial"]',
+          '#pane-articular input[data-group="diagnosticos"][value="escoliosis"]',
+          '#pane-articular input[data-group="osteoAntecedentes"][value="cirugias"]',
+          '#pane-articular input[data-group="osteoAntecedentes"][value="lesiones"]',
+          '#pane-articular input[data-group="osteoAntecedentes"][value="fracturas"]',
+        ];
+        const trackedInputs = trackedSelectors
+          .map((selector) => document.querySelector(selector))
+          .filter(Boolean);
+        const refreshArticularHighlights = () => {
+          trackedInputs.forEach((input) => {
+            const option = input.closest(".option");
+            if (!option) return;
+            option.classList.toggle("articular-positive-active", input.checked);
+          });
+        };
+        trackedInputs.forEach((input) => {
+          input.addEventListener("change", refreshArticularHighlights);
+        });
+        refreshArticularHighlights();
+      }
       function flattenFormData(formId, data) {
         const flat = {};
         for (const section of FORMS[formId].sections) {
@@ -1905,6 +1959,10 @@
             "Complete Póliza y Certificados con valores numéricos para continuar.";
           return null;
         }
+        if (!validateFormSpecificRules(formId, data)) {
+          status.textContent = "Complete los campos requeridos del formulario para continuar.";
+          return null;
+        }
         updateRequiredSummary(formId, data);
         const res = form.evaluate(data);
         box.className =
@@ -1999,6 +2057,7 @@
       render();
       bindCardioDependencies();
       bindGastroHighlights();
+      bindArticularHighlights();
     </script>
   </body>
 </html>
