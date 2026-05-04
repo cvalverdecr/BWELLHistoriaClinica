@@ -222,6 +222,10 @@
         background: #ccff99;
         border-color: #9ccc65;
       }
+      .option.gastro-positive-active {
+        background: #ccff99;
+        border-color: #9ccc65;
+      }
       .option input {
         width: auto;
         margin-top: 3px;
@@ -643,6 +647,12 @@
           -webkit-print-color-adjust: exact;
           print-color-adjust: exact;
         }
+        .option.gastro-positive-active {
+          background: #ccff99 !important;
+          border-color: #9ccc65 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
         .options {
           grid-template-columns: 1fr 1fr;
           gap: 6px 8px;
@@ -1042,7 +1052,7 @@
                   ],
                 ),
               ],
-              "Regla principal del Excel.",
+              "Si se responde Sí a una opción, no debe ingresar al programa BWell Gastro y se debe referir urgente a gastroenterología",
             ),
             section("Síntomas generales", [
               radio("dolorAbdominal", "Dolor abdominal", [
@@ -1115,7 +1125,7 @@
               ),
               radio(
                 "dietaIndicada",
-                "¿Ha realizado dieta específica por indicación médica o por cuenta propia?",
+                "¿Ha realizado dieta específica por indicación médica?",
                 [opt("si", "Sí"), opt("no", "No")],
               ),
               checks("tipoDieta", "Tipo de dieta o alimentación", [
@@ -1759,6 +1769,44 @@
         });
         refreshCardioHighlights();
       }
+      function bindGastroHighlights() {
+        const trackedSelectors = [
+          '#pane-gastro input[data-field="dolorAbdominal"][value="ocasional"]',
+          '#pane-gastro input[data-field="dolorAbdominal"][value="frecuente"]',
+          '#pane-gastro input[data-field="dolorAbdominal"][value="diario"]',
+          '#pane-gastro input[data-field="distension"][value="ocasional"]',
+          '#pane-gastro input[data-field="distension"][value="frecuente"]',
+          '#pane-gastro input[data-field="distension"][value="diario"]',
+          '#pane-gastro input[data-field="reflujo"][value="ocasional"]',
+          '#pane-gastro input[data-field="reflujo"][value="frecuente"]',
+          '#pane-gastro input[data-field="reflujo"][value="diario"]',
+          '#pane-gastro input[data-group="habito"][value="diarrea"]',
+          '#pane-gastro input[data-group="habito"][value="estrenimiento"]',
+          '#pane-gastro input[data-group="habito"][value="alternancia"]',
+          '#pane-gastro input[data-field="estresEmpeora"][value="si"]',
+          '#pane-gastro input[data-field="estresEmpeora"][value="ocasional"]',
+          '#pane-gastro input[data-field="tomaMeds"][value="si"]',
+          '#pane-gastro input[data-field="frecuenciaMeds"][value="diario"]',
+          '#pane-gastro input[data-field="frecuenciaMeds"][value="semana"]',
+          '#pane-gastro input[data-field="interfiere"][value="mucho"]',
+          '#pane-gastro input[data-field="evita"][value="si"]',
+          '#pane-gastro input[data-field="criterioFinal"][value="si"]',
+        ];
+        const trackedInputs = trackedSelectors
+          .map((selector) => document.querySelector(selector))
+          .filter(Boolean);
+        const refreshGastroHighlights = () => {
+          trackedInputs.forEach((input) => {
+            const option = input.closest(".option");
+            if (!option) return;
+            option.classList.toggle("gastro-positive-active", input.checked);
+          });
+        };
+        trackedInputs.forEach((input) => {
+          input.addEventListener("change", refreshGastroHighlights);
+        });
+        refreshGastroHighlights();
+      }
       function flattenFormData(formId, data) {
         const flat = {};
         for (const section of FORMS[formId].sections) {
@@ -1950,6 +1998,7 @@
       }
       render();
       bindCardioDependencies();
+      bindGastroHighlights();
     </script>
   </body>
 </html>
