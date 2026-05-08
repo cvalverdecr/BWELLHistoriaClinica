@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
@@ -704,7 +704,6 @@
         localStorage/sessionStorage y el payload mínimo opcional no contiene
         datos clínicos detallados ni datos personales.
       </div>
-      <div class="tabs no-print" id="tabs"></div>
       <div id="panes"></div>
     </main>
     <script>
@@ -797,504 +796,6 @@
       });
       const section = (title, items, note = "") => ({ title, items, note });
       const FORMS = {
-        cardio: {
-          code: "CM",
-          tab: "Cardiometabólico",
-          title: "PROGRAMA BWELL CARDIO‑METABÓLICO",
-          subtitle: "Historia clínica y criterio automático de ingreso.",
-          nameField: "nombreCompleto",
-          sections: [
-            section("Datos generales", [
-              textField("fechaEvaluacion", "Fecha de evaluación", "date"),
-              textField("medicoEvaluador", "Médico evaluador"),
-              textField("nombreCompleto", "Nombre completo", "text", "half"),
-              textField("edad", "Edad", "number", "small"),
-              selectField("genero", "Género", GENDER_OPTIONS),
-              selectField("estadoCivil", "Estado civil", CIVIL_STATUS_OPTIONS),
-              textField("ocupacion", "Ocupación"),
-              textField("peso", "Peso (kg)", "number", "small"),
-              textField("talla", "Talla (cm)", "number", "small"),
-              area("motivoConsulta", "Motivo de la consulta"),
-            ]),
-            section(
-              "Diagnósticos confirmados",
-              [
-                checks("diagnosticos", "Marcar todos los que apliquen", [
-                  opt("hipertension", "Hipertensión arterial", "D01"),
-                  opt("dm1", "Diabetes mellitus tipo 1", "D02"),
-                  opt("dm2", "Diabetes mellitus tipo 2", "D03"),
-                  opt("dislipidemia", "Dislipidemia", "D04"),
-                  opt("sindromeMetabolico", "Síndrome metabólico", "D05"),
-                  opt(
-                    "resistenciaInsulina",
-                    "Resistencia a la insulina",
-                    "D06",
-                  ),
-                ]),
-              ],
-              "Diagnóstico médico previo, requisito de ingreso al programa.",
-            ),
-            section("Antecedentes personales no patológicos", [
-              radio("tabaquismo", "Tabaquismo", [
-                opt("nunca", "Nunca"),
-                opt("exfumador", "Exfumador"),
-                opt("activo", "Activo"),
-              ]),
-              radio("alcohol", "Consumo de alcohol", [
-                opt("ninguno", "Ninguno"),
-                opt("ocasional", "Ocasional"),
-                opt("frecuente", "Frecuente"),
-              ]),
-              radio("sustancias", "Uso de otras sustancias", [
-                opt("si", "Sí"),
-                opt("no", "No"),
-              ]),
-              area("sustanciasDetalle", "Especificar", "half"),
-            ]),
-            section("Antecedentes personales patológicos", [
-              checks("cardiovasculares", "Cardiovasculares", [
-                opt("cardiopatia", "Cardiopatía isquémica", "C01"),
-                opt("infarto", "Infarto agudo de miocardio", "C02"),
-                opt("insuficiencia", "Insuficiencia cardíaca", "C03"),
-                opt("arritmias", "Arritmias", "C04"),
-                opt("ecv", "Evento cerebrovascular", "C05"),
-              ]),
-              checks("endocrino", "Endocrino‑metabólicos", [
-                opt("obesidad", "Obesidad", "E01"),
-                opt("higadoGraso", "Hígado graso no alcohólico", "E02"),
-                opt("tiroides", "Hipotiroidismo / Hipertiroidismo", "E03"),
-                opt("gota", "Ácido úrico alto / Gota", "E04"),
-                opt("sop", "Síndrome de ovario poliquístico", "E05"),
-              ]),
-              checks("renales", "Renales", [
-                opt("erc", "Enfermedad renal crónica"),
-                opt("proteinuria", "Proteinuria / Microalbuminuria"),
-              ]),
-              checks("otrosPatologicos", "Otros relevantes", [
-                opt("apnea", "Apnea obstructiva del sueño"),
-                opt("gi", "Trastornos gastrointestinales"),
-                opt("saludMental", "Trastornos de salud mental"),
-                opt("otros", "Otros"),
-              ]),
-              area("otrosDetalle", "Detalle de otros relevantes", "half"),
-            ]),
-            section("Antecedentes heredofamiliares", [
-              checks("familiares", "Abuelos, mamá, papá, hermanos", [
-                opt("diabetes", "Diabetes mellitus"),
-                opt("hta", "Hipertensión arterial"),
-                opt("dislipidemia", "Dislipidemia"),
-                opt("ecvPrematura", "Enfermedad cardiovascular prematura"),
-                opt("cerebrovascular", "Enfermedad cerebrovascular"),
-                opt("obesidad", "Obesidad o sobrepeso"),
-              ]),
-            ]),
-            section("Tratamientos actuales", [
-              checks("medicamentos", "Medicamentos", [
-                opt("antihipertensivos", "Antihipertensivos", "M01"),
-                opt(
-                  "hipoglucemiantes",
-                  "Hipoglucemiantes orales / Insulina",
-                  "M02",
-                ),
-                opt("hipolipemiantes", "Hipolipemiantes", "M03"),
-                opt("otros", "Otros", "M04"),
-              ]),
-              area("medicamentosDetalle", "Especificar medicamentos", "half"),
-              radio("adherencia", "Adherencia al tratamiento", [
-                opt("adecuada", "Adecuada"),
-                opt("irregular", "Irregular"),
-                opt("baja", "Baja"),
-              ]),
-            ]),
-            section("Exámenes de laboratorio y estudios complementarios", [
-              textField("glucosa", "Glucosa en ayunas"),
-              textField("hba1c", "Hemoglobina glicosilada"),
-              textField("perfilLipidico", "Perfil lipídico"),
-              textField("creatinina", "Creatinina"),
-              textField("mapa", "MAPA"),
-              textField("ekg", "Electrocardiograma"),
-              textField("eco", "Ecocardiograma"),
-              textField("pruebaEsfuerzo", "Prueba esfuerzo"),
-            ]),
-            section("Complicaciones asociadas", [
-              checks("complicaciones", "Complicaciones", [
-                opt("retinopatia", "Retinopatía"),
-                opt("neuropatia", "Neuropatía"),
-                opt("nefropatia", "Nefropatía"),
-                opt("ecvEstablecida", "Enfermedad cardiovascular establecida"),
-                opt("pieDiabetico", "Pie diabético"),
-                opt("ninguna", "Ninguna documentada"),
-              ]),
-              area("complicacionesDetalle", "Detalle", "half"),
-            ]),
-          ],
-          evaluate(data) {
-            const diag = data.diagnosticos || [],
-              cardio = data.cardiovasculares || [],
-              endo = data.endocrino || [],
-              meds = data.medicamentos || [];
-            const endoTrigger = endo.some((x) =>
-              ["higadoGraso", "tiroides", "gota"].includes(x),
-            );
-            const medTrigger = meds.some((x) =>
-              [
-                "antihipertensivos",
-                "hipoglucemiantes",
-                "hipolipemiantes",
-              ].includes(x),
-            );
-            const candidate =
-              diag.length > 0 || cardio.length > 0 || endoTrigger || medTrigger;
-            const labels = [
-              ...labelList("cardio", "diagnosticos", diag),
-              ...labelList(
-                "cardio",
-                "cardiovasculares",
-                cardio.filter((x) =>
-                  [
-                    "cardiopatia",
-                    "insuficiencia",
-                    "ecv",
-                    "infarto",
-                    "arritmias",
-                  ].includes(x),
-                ),
-              ),
-              ...labelList(
-                "cardio",
-                "endocrino",
-                endo.filter((x) => ["higadoGraso", "gota"].includes(x)),
-              ),
-            ].filter((label, index, arr) => arr.indexOf(label) === index);
-            return {
-              resultCode: candidate ? "C" : "N",
-              resultText: candidate ? "Candidato BWell" : "No aplica BWell",
-              detail: labels.length
-                ? `Diagnósticos: ${labels.join(", ")}`
-                : "Diagnósticos: sin diagnóstico confirmado marcado.",
-              payload: {
-                v: 1,
-                tool: "BWELL_LOCAL",
-                f: "CM",
-                r: candidate ? "C" : "N",
-                rc: [candidate ? "R01" : "R00"],
-                d: today(),
-              },
-            };
-          },
-        },
-        gastro: {
-          code: "GA",
-          tab: "Gastro",
-          title: "PROGRAMA BWELL GASTRO",
-          subtitle:
-            "Historia clínica gastrointestinal y criterio automático según reglas del Excel.",
-          nameField: "nombrePaciente",
-          sections: [
-            section("Datos generales", [
-              textField("fechaEvaluacion", "Fecha de evaluación", "date"),
-              textField("medicoEvaluador", "Médico evaluador"),
-              textField("nombrePaciente", "Nombre completo", "text", "half"),
-              textField("edad", "Edad", "number", "small"),
-              selectField("sexo", "Género", GENDER_OPTIONS),
-              selectField("estadoCivil", "Estado civil", CIVIL_STATUS_OPTIONS),
-              textField("ocupacion", "Ocupación"),
-              textField("peso", "Peso (kg)", "number", "small"),
-              textField("talla", "Talla (cm)", "number", "small"),
-            ]),
-            section("Antecedentes familiares gastrointestinales", [
-              checks("familiaresGi", "Mamá, papá, hermanos, abuelos", [
-                opt("sii", "Síndrome intestino irritable"),
-                opt("celiaca", "Enfermedad celíaca"),
-                opt("gastritis", "Gastritis"),
-                opt("colitis", "Colitis"),
-                opt("diverticulosis", "Diverticulosis"),
-                opt("sangrados", "Sangrados digestivos"),
-              ]),
-            ]),
-            section("Historial gastrointestinal", [
-              area(
-                "desdeCuando",
-                "¿Desde cuándo presenta síntomas digestivos?",
-              ),
-              area(
-                "estudiosPrevios",
-                "¿Ha tenido estudios previos? Endoscopia, colonoscopia, biopsias, pruebas de aliento o laboratorio.",
-              ),
-              radio(
-                "hospitalizado",
-                "¿Ha sido hospitalizado/a por problemas digestivos?",
-                [opt("si", "Sí"), opt("no", "No")],
-              ),
-            ]),
-            section(
-              "Presencia de signos de alarma",
-              [
-                checks(
-                  "alarmas",
-                  "Si se responde Sí a una opción, no debe ingresar al programa BWell Gastro y se debe referir urgente a gastroenterología.",
-                  [
-                    opt("perdidaPeso", "Pérdida de peso involuntaria", "A01"),
-                    opt("dolorNocturno", "Dolor nocturno", "A02"),
-                    opt("vomitos", "Vómitos persistentes", "A03"),
-                    opt("anemia", "Anemia ferropénica", "A04"),
-                    opt(
-                      "sangrados",
-                      "Sangrados digestivos altos o bajos",
-                      "A05",
-                    ),
-                    opt("maligna", "Sospecha de lesión maligna", "A06"),
-                    opt(
-                      "ulcera",
-                      "Seguimiento de úlcera gástrica/duodenal no cicatrizada",
-                      "A07",
-                    ),
-                    opt(
-                      "barrett",
-                      "Sospecha de complicaciones por reflujo: estenosis, Barrett",
-                      "A08",
-                    ),
-                    opt(
-                      "eii",
-                      "Sospecha de enfermedad intestinal inflamatoria",
-                      "A09",
-                    ),
-                  ],
-                ),
-              ],
-              "Si se responde Sí a una opción, no debe ingresar al programa BWell Gastro y se debe referir urgente a gastroenterología",
-            ),
-            section("Síntomas generales", [
-              radio("dolorAbdominal", "Dolor abdominal", [
-                opt("nunca", "Nunca"),
-                opt("ocasional", "Ocasional"),
-                opt("frecuente", "Frecuente"),
-                opt("diario", "Diario"),
-              ]),
-              radio("distension", "Distensión abdominal o gases", [
-                opt("nunca", "Nunca"),
-                opt("ocasional", "Ocasional"),
-                opt("frecuente", "Frecuente"),
-                opt("diario", "Diario"),
-              ]),
-              radio("reflujo", "Acidez o reflujo antes o después de comer", [
-                opt("nunca", "Nunca"),
-                opt("ocasional", "Ocasional"),
-                opt("frecuente", "Frecuente"),
-                opt("diario", "Diario"),
-              ]),
-              checks("habito", "Cambios en el hábito intestinal", [
-                opt("diarrea", "Diarrea"),
-                opt("estrenimiento", "Estreñimiento"),
-                opt("alternancia", "Alternancia"),
-              ]),
-            ]),
-            section("Alimentación y síntomas", [
-              radio(
-                "alimentosEmpeoran",
-                "¿Identifica alimentos que empeoran sus síntomas?",
-                [opt("si", "Sí"), opt("no", "No")],
-              ),
-              area("alimentosCuales", "¿Cuáles?", "half"),
-              radio(
-                "ultraprocesados",
-                "Frecuencia de ultraprocesados, frituras o comidas muy condimentadas/picantes",
-                [
-                  opt("nunca", "Nunca"),
-                  opt("ocasional", "Ocasional"),
-                  opt("frecuente", "Frecuente"),
-                  opt("diario", "Diario"),
-                ],
-              ),
-              radio("ultraEmpeora", "¿Los anteriores empeoran sus síntomas?", [
-                opt("si", "Sí"),
-                opt("no", "No"),
-              ]),
-              area("ultraCuales", "Cuáles", "half"),
-              radio("lacteos", "¿Consume lácteos?", [
-                opt("nunca", "Nunca"),
-                opt("ocasional", "Ocasional"),
-                opt("frecuente", "Frecuente"),
-                opt("diario", "Diario"),
-              ]),
-              radio(
-                "intolerancia",
-                "¿Ha notado intolerancia a lácteos u otro alimento?",
-                [opt("si", "Sí"), opt("no", "No")],
-              ),
-              area("intoleranciaCuales", "Cuáles", "half"),
-              radio(
-                "bebidas",
-                "¿Consume bebidas carbonatadas, café o alcohol?",
-                [
-                  opt("nunca", "Nunca"),
-                  opt("ocasional", "Ocasional"),
-                  opt("frecuente", "Frecuente"),
-                  opt("diario", "Diario"),
-                ],
-              ),
-              radio(
-                "dietaIndicada",
-                "¿Ha realizado dieta específica por indicación médica?",
-                [opt("si", "Sí"), opt("no", "No")],
-              ),
-              checks("tipoDieta", "Tipo de dieta o alimentación", [
-                opt("ninguna", "Ninguna"),
-                opt("lowCarb", "Low carb"),
-                opt("keto", "Keto"),
-                opt("plantas", "Basada en plantas"),
-                opt("mediterranea", "Mediterránea"),
-                opt("ayuno", "Ayuno intermitente"),
-                opt("sinGluten", "Sin gluten"),
-                opt("otra", "Otra"),
-              ]),
-            ]),
-            section("Estilo de vida", [
-              radio(
-                "actividadFisica",
-                "¿Con qué frecuencia realiza actividad física?",
-                [
-                  opt("nunca", "Nunca"),
-                  opt("ocasional", "Ocasional"),
-                  opt("3_4", "3-4 veces por semana"),
-                  opt("diario", "Diario"),
-                ],
-              ),
-              radio("sueno", "¿Cómo describiría la calidad de su sueño?", [
-                opt("bueno", "Bueno, se siente descansado durante el día"),
-                opt(
-                  "regular",
-                  "Regular, se siente descansado al despertar pero logra sus actividades cotidianas",
-                ),
-                opt("malo", "Malo, se siente cansado durante el día"),
-              ]),
-              radio(
-                "estres",
-                "¿Cómo cataloga su nivel de estrés diario o ansiedad?",
-                [
-                  opt("bajo", "Bajo"),
-                  opt("moderado", "Moderado"),
-                  opt("alto", "Alto"),
-                ],
-              ),
-              radio(
-                "estresEmpeora",
-                "¿Ha notado empeoramiento de síntomas en situaciones de estrés?",
-                [
-                  opt("si", "Sí"),
-                  opt("ocasional", "Ocasional"),
-                  opt("no", "No"),
-                ],
-              ),
-              radio("fuma", "¿Fuma o vapea?", [
-                opt("no", "No"),
-                opt("ocasional", "Ocasional"),
-                opt("frecuente", "Frecuente"),
-                opt("diario", "Diario"),
-              ]),
-            ]),
-            section("Tratamiento y calidad de vida", [
-              radio(
-                "tomaMeds",
-                "¿Actualmente toma medicamentos para su condición gastrointestinal?",
-                [opt("si", "Sí"), opt("no", "No")],
-              ),
-              radio("frecuenciaMeds", "¿Con qué frecuencia los toma?", [
-                opt("diario", "Todos los días"),
-                opt("semana", "A veces durante la semana"),
-                opt("raraVez", "Rara vez"),
-                opt("nunca", "Nunca"),
-              ]),
-              radio(
-                "interfiere",
-                "¿Sus síntomas interfieren con su trabajo o actividades diarias?",
-                [
-                  opt("nunca", "No, nunca"),
-                  opt("poco", "Poco"),
-                  opt("mucho", "Mucho"),
-                ],
-              ),
-              radio(
-                "evita",
-                "¿Evita ciertos alimentos, actividades o eventos sociales por sus síntomas?",
-                [opt("no", "No"), opt("si", "Sí")],
-              ),
-              radio("criterioFinal", "Criterio final de ingreso al programa", [
-                opt("no", "No"),
-                opt("si", "Sí"),
-              ]),
-            ]),
-          ],
-          evaluate(data) {
-            const alarms = data.alarmas || [];
-            if (alarms.length) {
-              return {
-                resultCode: "X",
-                resultText:
-                  "NO debe ingresar al programa BWell Gastro y se deberá referir urgente a gastroenterología",
-                detail: `Signos de alarma marcados: ${labelList("gastro", "alarmas", alarms).join(", ")}`,
-                payload: {
-                  v: 1,
-                  tool: "BWELL_LOCAL",
-                  f: "GA",
-                  r: "X",
-                  rc: ["X01"],
-                  d: today(),
-                },
-              };
-            }
-            const groups = [];
-            const rc = [];
-            const freq = (v) =>
-              ["ocasional", "frecuente", "diario"].includes(v);
-            if (freq(data.dolorAbdominal)) {
-              groups.push("Dolor abdominal");
-              rc.push("R10");
-            }
-            if (freq(data.distension)) {
-              groups.push("Distensión abdominal o gases");
-              rc.push("R11");
-            }
-            if (freq(data.reflujo)) {
-              groups.push("Acidez o reflujo");
-              rc.push("R12");
-            }
-            if ((data.habito || []).length) {
-              groups.push("Cambios en el hábito intestinal");
-              rc.push("R13");
-            }
-            const fixed =
-              data.estresEmpeora === "si" ||
-              data.estresEmpeora === "ocasional" ||
-              data.tomaMeds === "si" ||
-              ["diario", "semana"].includes(data.frecuenciaMeds) ||
-              data.interfiere === "mucho" ||
-              data.evita === "si" ||
-              data.criterioFinal === "si";
-            if (fixed) {
-              groups.push("Candidato BWell Gastro");
-              rc.push("R20");
-            }
-            const candidate = groups.length > 0;
-            return {
-              resultCode: candidate ? "C" : "N",
-              resultText: candidate
-                ? "Candidato BWell"
-                : "Sin criterio automático registrado",
-              detail: candidate
-                ? groups.join(", ")
-                : "No se activó ninguna regla automática de ingreso.",
-              payload: {
-                v: 1,
-                tool: "BWELL_LOCAL",
-                f: "GA",
-                r: candidate ? "C" : "N",
-                rc: rc.length ? dedupe(rc) : ["R00"],
-                d: today(),
-              },
-            };
-          },
-        },
         articular: {
           code: "AE",
           tab: "Articular y espalda",
@@ -1543,21 +1044,19 @@
           },
         },
       };
+      const ACTIVE_FORM_ID = "articular";
       const REQUIRED_FIELDS = [
         requiredNumberField("poliza", "Póliza"),
         requiredNumberField("certificados", "Certificados"),
       ];
-      Object.values(FORMS).forEach((form) => {
-        const firstSection = form.sections[0];
-        if (!firstSection) return;
+      const activeForm = FORMS[ACTIVE_FORM_ID];
+      const firstSection = activeForm.sections[0];
+      if (firstSection) {
         firstSection.items.splice(
           2,
           0,
           ...REQUIRED_FIELDS.map((field) => ({ ...field })),
         );
-      });
-      function dedupe(a) {
-        return [...new Set(a)];
       }
       function findGroup(form, groupId) {
         for (const s of form.sections) {
@@ -1573,25 +1072,6 @@
         return ids.map(
           (id) => (g.options.find((o) => o.id === id) || {}).label || id,
         );
-      }
-      function render() {
-        const tabs = document.getElementById("tabs"),
-          panes = document.getElementById("panes");
-        Object.entries(FORMS).forEach(([id, form], idx) => {
-          const b = document.createElement("button");
-          b.type = "button";
-          b.className = "tab" + (idx === 0 ? " active" : "");
-          b.textContent = form.tab;
-          b.onclick = () => activate(id);
-          tabs.appendChild(b);
-          const p = document.createElement("section");
-          p.className = "pane" + (idx === 0 ? " active" : "");
-          p.id = "pane-" + id;
-          p.dataset.form = id;
-        p.innerHTML = `<div class="sheet-title"><h2>${esc(form.title)}</h2><p>${esc(form.subtitle)}</p><div id="${id}__requcoiredSummary" class="required-summary"><div class="required-summary-item"><strong>Póliza</strong><span id="${id}__summary_poliza"></span></div><div class="required-summary-item"><strong>Certificados</strong><span id="${id}__summary_certificados"></span></div></div></div><div class="consent no-print"><input id="${id}__consent" type="checkbox"><label for="${id}__consent">Confirmo que el uso de esta herramienta cuenta con la base legal/consentimiento aplicable y que el PDF o archivo generado será custodiado conforme a las políticas internas.</label></div><div class="sections">${form.sections.map((s) => renderSection(id, s)).join("")}</div><div id="${id}__result" class="result"><h3>Resultado</h3><p>Presione <strong>¿Es Candidato?</strong> para aplicar las reglas locales.</p></div><div class="toolbar no-print"><button class="action" type="button" onclick="calculate('${id}')">¿Es Candidato?</button><button class="action" type="button" onclick="printPdf('${id}')">Crear PDF / imprimir</button><button class="action secondary" type="button" onclick="generateCsv('${id}')">Generar CSV</button><button class="action secondary" type="button" onclick="copyPayload('${id}')">Copiar payload mínimo</button><button class="action secondary" type="button" onclick="downloadPayload('${id}')">Descargar payload mínimo</button><button class="action danger" type="button" onclick="clearForm('${id}')">Limpiar campos</button><span class="status" id="${id}__status">Creado por Dra. Melissa Chavarría - Procesamiento local, sin transmisión - Versión 1.0</span></div>`;
-          panes.appendChild(p);
-        });
-        renderGuide();
       }
       function renderSection(formId, s) {
         const isGeneralSection = s.title === "Datos generales";
@@ -1609,36 +1089,6 @@
         if (i.kind === "checks")
           return `<div class="field wide"><div class="label">${esc(i.title)}</div>${i.note ? `<div class="help">${esc(i.note)}</div>` : ""}<div class="options">${i.options.map((o) => `<label class="option"><input type="checkbox" data-group="${i.id}" value="${o.id}"><span>${esc(o.label)}</span></label>`).join("")}</div></div>`;
         return "";
-      }
-      function renderGuide() {
-        const tabs = document.getElementById("tabs"),
-          panes = document.getElementById("panes");
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "tab";
-        b.textContent = "Guía Articular";
-        b.onclick = () => activate("guide");
-        tabs.appendChild(b);
-        const p = document.createElement("section");
-        p.className = "pane";
-        p.id = "pane-guide";
-        p.innerHTML = `<div class="sheet-title"><h2>Guía de apoyo - Clínica Articular y Espalda</h2><p>Contenido de referencia de la hoja guía del Excel. No captura respuestas.</p></div><div class="guide-grid"><div class="guide-card"><h3>✅ Sí es candidato</h3><ul><li>Dolor osteoarticular o de columna.</li><li>Lumbalgia mecánica o crónica, cervicalgia o dorsalgia.</li><li>Síndrome miofascial, radiculopatía estable, artrosis, tendinopatías o bursitis.</li><li>Impacto funcional moderado, dolor EVA 3-7, alteración del sueño o recaídas frecuentes.</li><li>Disposición a ejercicio terapéutico y cambios de hábitos.</li></ul></div><div class="guide-card"><h3>⚠️ Candidato condicionado</h3><ul><li>Dolor EVA mayor a 7 persistente.</li><li>Estudios de imagen pendientes o desactualizados.</li><li>Tratamiento farmacológico no optimizado.</li><li>Episodio agudo reciente en resolución.</li><li>Revalorar ingreso posteriormente.</li></ul></div><div class="guide-card"><h3>❌ No candidato inicial</h3><ul><li>Déficit motor progresivo o trastornos esfinterianos.</li><li>Síndrome de cauda equina o pérdida sensitiva severa progresiva.</li><li>Fractura no estabilizada, infección osteoarticular/discitis o tumor óseo/metastásico.</li><li>Postoperatorio reciente sin alta de cirugía.</li><li>Referir a urgencias o especialidad antes de considerar el programa.</li></ul></div><div class="guide-card"><h3>Objetivo de la consulta inicial</h3><ul><li>Confirmar diagnóstico clínico.</li><li>Descartar signos de alarma.</li><li>Valorar impacto funcional.</li><li>Identificar barreras y factores asociados.</li><li>Definir criterio de ingreso y derivar al equipo interdisciplinario.</li></ul></div></div>`;
-        panes.appendChild(p);
-      }
-      function activate(id) {
-        document
-          .querySelectorAll(".tab")
-          .forEach((t) => t.classList.remove("active"));
-        document
-          .querySelectorAll(".pane")
-          .forEach((p) => p.classList.remove("active"));
-        const tabs = [...document.querySelectorAll(".tab")];
-        const pane = document.getElementById("pane-" + id);
-        if (pane) {
-          pane.classList.add("active");
-          const idx = [...document.querySelectorAll(".pane")].indexOf(pane);
-          if (tabs[idx]) tabs[idx].classList.add("active");
-        }
       }
       function esc(s) {
         return String(s ?? "").replace(
@@ -1712,121 +1162,6 @@
         box.classList.toggle("active", !!hasValues);
         poliza.textContent = data.poliza || "";
         certificados.textContent = data.certificados || "";
-      }
-      function bindCardioDependencies() {
-        const trackedSelectors = [
-          '#pane-cardio input[data-group="cardiovasculares"][value="cardiopatia"]',
-          '#pane-cardio input[data-group="cardiovasculares"][value="insuficiencia"]',
-          '#pane-cardio input[data-group="cardiovasculares"][value="ecv"]',
-          '#pane-cardio input[data-group="cardiovasculares"][value="infarto"]',
-          '#pane-cardio input[data-group="cardiovasculares"][value="arritmias"]',
-          '#pane-cardio input[data-group="endocrino"][value="higadoGraso"]',
-          '#pane-cardio input[data-group="endocrino"][value="gota"]',
-          '#pane-cardio input[data-group="diagnosticos"][value="hipertension"]',
-          '#pane-cardio input[data-group="diagnosticos"][value="dm2"]',
-          '#pane-cardio input[data-group="diagnosticos"][value="sindromeMetabolico"]',
-          '#pane-cardio input[data-group="diagnosticos"][value="dm1"]',
-          '#pane-cardio input[data-group="diagnosticos"][value="dislipidemia"]',
-          '#pane-cardio input[data-group="diagnosticos"][value="resistenciaInsulina"]',
-        ];
-        const trackedInputs = trackedSelectors
-          .map((selector) => document.querySelector(selector))
-          .filter(Boolean);
-        const refreshCardioHighlights = () => {
-          trackedInputs.forEach((input) => {
-            const option = input.closest(".option");
-            if (!option) return;
-            option.classList.toggle("cardio-positive-active", input.checked);
-          });
-        };
-        const antihipertensivos = document.querySelector(
-          '#pane-cardio input[data-group="medicamentos"][value="antihipertensivos"]',
-        );
-        const hipertension = document.querySelector(
-          '#pane-cardio input[data-group="diagnosticos"][value="hipertension"]',
-        );
-        const hipoglucemiantes = document.querySelector(
-          '#pane-cardio input[data-group="medicamentos"][value="hipoglucemiantes"]',
-        );
-        const dm1 = document.querySelector(
-          '#pane-cardio input[data-group="diagnosticos"][value="dm1"]',
-        );
-        const dm2 = document.querySelector(
-          '#pane-cardio input[data-group="diagnosticos"][value="dm2"]',
-        );
-        const resistenciaInsulina = document.querySelector(
-          '#pane-cardio input[data-group="diagnosticos"][value="resistenciaInsulina"]',
-        );
-        const hipolipemiantes = document.querySelector(
-          '#pane-cardio input[data-group="medicamentos"][value="hipolipemiantes"]',
-        );
-        const dislipidemia = document.querySelector(
-          '#pane-cardio input[data-group="diagnosticos"][value="dislipidemia"]',
-        );
-        if (antihipertensivos && hipertension) {
-          antihipertensivos.addEventListener("change", () => {
-            if (antihipertensivos.checked) hipertension.checked = true;
-            refreshCardioHighlights();
-          });
-        }
-        if (hipoglucemiantes && dm1 && dm2 && resistenciaInsulina) {
-          hipoglucemiantes.addEventListener("change", () => {
-            if (hipoglucemiantes.checked) {
-              dm1.checked = true;
-              dm2.checked = true;
-              resistenciaInsulina.checked = true;
-            }
-            refreshCardioHighlights();
-          });
-        }
-        if (hipolipemiantes && dislipidemia) {
-          hipolipemiantes.addEventListener("change", () => {
-            if (hipolipemiantes.checked) dislipidemia.checked = true;
-            refreshCardioHighlights();
-          });
-        }
-        trackedInputs.forEach((input) => {
-          input.addEventListener("change", refreshCardioHighlights);
-        });
-        refreshCardioHighlights();
-      }
-      function bindGastroHighlights() {
-        const trackedSelectors = [
-          '#pane-gastro input[data-field="dolorAbdominal"][value="ocasional"]',
-          '#pane-gastro input[data-field="dolorAbdominal"][value="frecuente"]',
-          '#pane-gastro input[data-field="dolorAbdominal"][value="diario"]',
-          '#pane-gastro input[data-field="distension"][value="ocasional"]',
-          '#pane-gastro input[data-field="distension"][value="frecuente"]',
-          '#pane-gastro input[data-field="distension"][value="diario"]',
-          '#pane-gastro input[data-field="reflujo"][value="ocasional"]',
-          '#pane-gastro input[data-field="reflujo"][value="frecuente"]',
-          '#pane-gastro input[data-field="reflujo"][value="diario"]',
-          '#pane-gastro input[data-group="habito"][value="diarrea"]',
-          '#pane-gastro input[data-group="habito"][value="estrenimiento"]',
-          '#pane-gastro input[data-group="habito"][value="alternancia"]',
-          '#pane-gastro input[data-field="estresEmpeora"][value="si"]',
-          '#pane-gastro input[data-field="estresEmpeora"][value="ocasional"]',
-          '#pane-gastro input[data-field="tomaMeds"][value="si"]',
-          '#pane-gastro input[data-field="frecuenciaMeds"][value="diario"]',
-          '#pane-gastro input[data-field="frecuenciaMeds"][value="semana"]',
-          '#pane-gastro input[data-field="interfiere"][value="mucho"]',
-          '#pane-gastro input[data-field="evita"][value="si"]',
-          '#pane-gastro input[data-field="criterioFinal"][value="si"]',
-        ];
-        const trackedInputs = trackedSelectors
-          .map((selector) => document.querySelector(selector))
-          .filter(Boolean);
-        const refreshGastroHighlights = () => {
-          trackedInputs.forEach((input) => {
-            const option = input.closest(".option");
-            if (!option) return;
-            option.classList.toggle("gastro-positive-active", input.checked);
-          });
-        };
-        trackedInputs.forEach((input) => {
-          input.addEventListener("change", refreshGastroHighlights);
-        });
-        refreshGastroHighlights();
       }
       function bindArticularHighlights() {
         const trackedSelectors = [
@@ -2054,10 +1389,31 @@
         document.getElementById(`${formId}__status`).textContent =
           "Campos limpiados.";
       }
-      render();
-      bindCardioDependencies();
-      bindGastroHighlights();
+      function renderSingleForm() {
+        const panes = document.getElementById("panes");
+        const id = ACTIVE_FORM_ID;
+        const form = FORMS[id];
+        if (!panes || !form) return;
+        panes.innerHTML = "";
+        const p = document.createElement("section");
+        p.className = "pane active";
+        p.id = "pane-" + id;
+        p.dataset.form = id;
+        p.innerHTML = `<div class="sheet-title"><h2>${esc(form.title)}</h2><p>${esc(form.subtitle)}</p><div id="${id}__requiredSummary" class="required-summary"><div class="required-summary-item"><strong>Póliza</strong><span id="${id}__summary_poliza"></span></div><div class="required-summary-item"><strong>Certificados</strong><span id="${id}__summary_certificados"></span></div></div></div><div class="consent no-print"><input id="${id}__consent" type="checkbox"><label for="${id}__consent">Confirmo que el uso de esta herramienta cuenta con la base legal o consentimiento aplicable y que el PDF o archivo generado será custodiado conforme a las políticas internas.</label></div><div class="sections">${form.sections.map((s) => renderSection(id, s)).join("")}</div><div id="${id}__result" class="result"><h3>Resultado</h3><p>Presione <strong>¿Es Candidato?</strong> para aplicar las reglas locales.</p></div><div class="toolbar no-print"><button class="action" type="button" onclick="calculate('${id}')">¿Es Candidato?</button><button class="action" type="button" onclick="printPdf('${id}')">Crear PDF / imprimir</button><button class="action secondary" type="button" onclick="generateCsv('${id}')">Generar CSV</button><button class="action secondary" type="button" onclick="copyPayload('${id}')">Copiar payload mínimo</button><button class="action secondary" type="button" onclick="downloadPayload('${id}')">Descargar payload mínimo</button><button class="action danger" type="button" onclick="clearForm('${id}')">Limpiar campos</button><span class="status" id="${id}__status">Creado por Dra. Melissa Chavarría - Procesamiento local, sin transmisión - Versión 1.0</span></div>`;
+        panes.appendChild(p);
+      }
+      function activate(id) {
+        document
+          .querySelectorAll(".pane")
+          .forEach((p) => p.classList.remove("active"));
+        const pane = document.getElementById("pane-" + id);
+        if (pane) pane.classList.add("active");
+      }
+      renderSingleForm();
       bindArticularHighlights();
     </script>
   </body>
 </html>
+
+
+
