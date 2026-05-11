@@ -7,7 +7,8 @@
       http-equiv="Content-Security-Policy"
       content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; worker-src 'none';"
     />
-    <title>BWell - Historia clínica</title>
+    <title>SOLICITUD DE PREAUTORIZACION PROCEDIMIENTOS ORTOPEDICOS Y DE COLUMNA
+</title>
     <style>
       :root {
         --bg: #f6f8fb;
@@ -506,7 +507,11 @@
         }
         .intake-section {
           border-color: #bfcfe4;
-          background: linear-gradient(180deg, #fbfdff 0%, #f6f9fd 100%) !important;
+          background: linear-gradient(
+            180deg,
+            #fbfdff 0%,
+            #f6f9fd 100%
+          ) !important;
         }
         .intake-section .grid {
           grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -691,8 +696,7 @@
   </head>
   <body>
     <header class="no-print">
-      <h1>
-        BWell - Historia clínica
+      <h1>SOLICITUD DE PREAUTORIZACION PROCEDIMIENTOS ORTOPEDICOS Y DE COLUMNA
       </h1>
       <!-- <p>Archivo HTML estático para abrirse directamente en el navegador del usuario. Procesa las reglas en JavaScript local, no usa submit tradicional, no usa localStorage/sessionStorage y no incluye telemetría.</p> -->
     </header>
@@ -807,7 +811,12 @@
             section("Datos generales", [
               textField("fechaEvaluacion", "Fecha de evaluación", "date"),
               textField("medicoEvaluador", "Médico evaluador"),
-              textField("nombreCompleto", "Nombre completo", "text", "half"),
+              textField(
+                "nombreCompleto",
+                "Nombre completo del paciente",
+                "text",
+                "half",
+              ),
               textField("edad", "Edad", "number", "small"),
               selectField("sexo", "Género", GENDER_OPTIONS),
               selectField("estadoCivil", "Estado civil", CIVIL_STATUS_OPTIONS),
@@ -874,7 +883,7 @@
                     opt("fracturas", "Fracturas previas", "A03"),
                   ],
                 ),
-                checks("neurologicos", "Neurológicos / banderas rojas", [
+                checks("neurologicos", "Neurológicos", [
                   opt("deficitMotor", "Déficit motor", "X01"),
                   opt("sensitivas", "Alteraciones sensitivas", "X02"),
                   opt("compromiso", "Compromiso neurológico", "X03"),
@@ -956,15 +965,15 @@
               ]),
             ]),
             section("Exámenes o estudios complementarios", [
-              textField("radiografias", "Radiografías"),
+              textField("radiografias", "Radiografías *"),
               textField("rm", "Resonancia magnética"),
               textField("tac", "Tomografía axial computarizada"),
               textField("emg", "Electromiografía"),
-              textField("densitometria", "Densitometría ósea"),
+              textField("densitometria", "Densitometría ósea *"),
               textField("ultrasonido", "Ultrasonido musculoesquelético"),
-              textField("hba1c", "Hemoglobina glucosilada"),
-              textField("calcio", "Calcio sérico"),
-              textField("vitaminaD", "Vitamina D"),
+              textField("hba1c", "Hemoglobina glucosilada *"),
+              textField("calcio", "Calcio sérico *"),
+              textField("vitaminaD", "Vitamina D *"),
             ]),
             section("Consulta presencial e impacto funcional", [
               textField("marcha", "Marcha"),
@@ -1202,9 +1211,11 @@
           for (const item of section.items) {
             if (!item.id) continue;
             if (item.kind === "checks") {
-              flat[item.id] = labelList(formId, item.id, data[item.id] || []).join(
-                " | ",
-              );
+              flat[item.id] = labelList(
+                formId,
+                item.id,
+                data[item.id] || [],
+              ).join(" | ");
               continue;
             }
             if (item.kind === "radio" || item.kind === "select") {
@@ -1274,7 +1285,9 @@
         const csvWithBom = `\uFEFF${csv}`;
         const form = FORMS[formId];
         const name = safeName(data[form.nameField]);
-        const blob = new Blob([csvWithBom], { type: "text/csv;charset=utf-8;" });
+        const blob = new Blob([csvWithBom], {
+          type: "text/csv;charset=utf-8;",
+        });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -1295,7 +1308,8 @@
           return null;
         }
         if (!validateFormSpecificRules(formId, data)) {
-          status.textContent = "Complete los campos requeridos del formulario para continuar.";
+          status.textContent =
+            "Complete los campos requeridos del formulario para continuar.";
           return null;
         }
         updateRequiredSummary(formId, data);
@@ -1414,6 +1428,3 @@
     </script>
   </body>
 </html>
-
-
-
